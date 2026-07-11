@@ -1,6 +1,6 @@
-# Payment Frontend (React Native - Wompi Integration)
+# Payment Frontend (React Native - Integration)
 
-Esta aplicación móvil (React Native vía Expo) cumple con la prueba técnica de integración con la API de Wompi.
+Esta aplicación móvil (React Native vía Expo) cumple con la prueba técnica de integración con la API.
 
 ## Requisitos Cumplidos
 - **React Native (Expo)** utilizado para garantizar compilaciones multiplataforma (Android `.apk`).
@@ -38,4 +38,4 @@ eas build -p android --profile preview --local
 
 ## Notas
 - Asegúrate de tener tu backend NestJS corriendo en `http://localhost:3000`.
-- La llave pública de Sandbox de Wompi ya está inyectada en el código del Checkout.
+- La llave pública de Sandbox ya está inyectada en el código del Checkout.
