@@ -39,10 +39,10 @@ export default function SplashScreen({ navigation }: Props) {
         <View style={styles.iconContainer}>
           <Text style={styles.icon}>🛍️</Text>
         </View>
-        
+
         <Text style={styles.title}>TIENDA TECH</Text>
-        <Text style={styles.subtitle}>Prueba de Integración Wompi</Text>
-        
+        <Text style={styles.subtitle}>Integración </Text>
+
         <View style={styles.loaderContainer}>
           <View style={styles.dot} />
           <View style={[styles.dot, { opacity: 0.6 }]} />
