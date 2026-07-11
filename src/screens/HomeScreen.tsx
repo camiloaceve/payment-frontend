@@ -45,7 +45,15 @@ export default function HomeScreen({ navigation }: Props) {
 
   const renderItem = ({ item }: { item: Product }) => {
     const outOfStock = item.stock <= 0;
-    const imageUrl = item.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop';
+    
+    let imageSource;
+    if (item.image) {
+      imageSource = { uri: item.image };
+    } else if (item.name.toLowerCase().includes('teclado')) {
+      imageSource = require('../../assets/mechanical_keyboard.jpg');
+    } else {
+      imageSource = { uri: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop' }; // Auriculares por defecto
+    }
     
     return (
       <TouchableOpacity 
@@ -54,7 +62,7 @@ export default function HomeScreen({ navigation }: Props) {
         disabled={outOfStock}
         onPress={() => navigation.navigate('SelectProduct', { product: item })}
       >
-        <Image source={{ uri: imageUrl }} style={[styles.image, outOfStock && styles.imageDisabled]} />
+        <Image source={imageSource} style={[styles.image, outOfStock && styles.imageDisabled]} />
         <View style={styles.cardInfo}>
           <Text style={styles.productName}>{item.name}</Text>
           <Text style={styles.productPrice}>${item.price.toLocaleString('es-CO')}</Text>

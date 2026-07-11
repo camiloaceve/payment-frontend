@@ -11,12 +11,20 @@ type Props = {
 
 export default function SelectProductScreen({ navigation, route }: Props) {
   const { product } = route.params;
-  const imageUrl = product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop';
+  
+  let imageSource;
+  if (product.image) {
+    imageSource = { uri: product.image };
+  } else if (product.name.toLowerCase().includes('teclado')) {
+    imageSource = require('../../assets/mechanical_keyboard.jpg');
+  } else {
+    imageSource = { uri: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop' }; // Auriculares por defecto
+  }
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Image source={{ uri: imageUrl }} style={styles.image} />
+        <Image source={imageSource} style={styles.image} />
         <View style={styles.content}>
           <Text style={styles.title}>{product.name}</Text>
           <Text style={styles.price}>${product.price.toLocaleString('es-CO')}</Text>
