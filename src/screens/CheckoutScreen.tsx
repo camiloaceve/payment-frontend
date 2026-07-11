@@ -71,7 +71,7 @@ export default function CheckoutScreen({ navigation, route }: Props) {
       const cardToken = wompiRes.data.data.id;
 
       // 2. Send to Backend using dynamic product ID, quantity and total amount
-      const backendRes = await axios.post('http://localhost:3000/payments', {
+      const backendRes = await axios.post('https://3dx9wnxkyc.execute-api.us-east-2.amazonaws.com/dev/payments', {
         productId: product.id,
         quantity: quantity,
         amount: totalAmount,

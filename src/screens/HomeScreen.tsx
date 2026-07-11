@@ -24,7 +24,7 @@ export default function HomeScreen({ navigation }: Props) {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/products');
+        const response = await axios.get('https://3dx9wnxkyc.execute-api.us-east-2.amazonaws.com/dev/products');
         const data = response.data.data || response.data;
         setProducts(Array.isArray(data) ? data : [data]);
       } catch (error) {
