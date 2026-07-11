@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Modal, ActivityIndicator, Alert } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useDispatch } from 'react-redux';
 import { saveTransactionSecurely } from '../store/slices/transactionSlice';
@@ -8,29 +9,31 @@ import axios from 'axios';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Checkout'>;
+  route: RouteProp<RootStackParamList, 'Checkout'>;
 };
 
 // WOMPI PUBLIC KEY FROM ENVIRONMENT OR HARDCODED FOR THIS TEST
 const WOMPI_PUB_KEY = 'pub_test_Q5yDA9xoKdePzhSGeVe9HAez7HgGORGf';
 
-export default function CheckoutScreen({ navigation }: Props) {
+export default function CheckoutScreen({ navigation, route }: Props) {
+  const { product } = route.params;
   const dispatch = useDispatch<any>();
   
-  // Customer Data
-  const [email, setEmail] = useState('lorenalopezganan@gmail.com');
-  const [fullName, setFullName] = useState('Astrid Lorena Lopez');
-  const [phone, setPhone] = useState('+573197226439');
+  // Customer Data (Clean - no hardcoded data)
+  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
   
   // Billing Data
-  const [legalIdType, setLegalIdType] = useState('CC');
-  const [legalId, setLegalId] = useState('1025520');
+  const [legalIdType, setLegalIdType] = useState('');
+  const [legalId, setLegalId] = useState('');
 
   // Credit Card Data (Modal)
   const [showModal, setShowModal] = useState(false);
-  const [cardNumber, setCardNumber] = useState('4242424242424242');
-  const [cvc, setCvc] = useState('123');
-  const [expMonth, setExpMonth] = useState('12');
-  const [expYear, setExpYear] = useState('30');
+  const [cardNumber, setCardNumber] = useState('');
+  const [cvc, setCvc] = useState('');
+  const [expMonth, setExpMonth] = useState('');
+  const [expYear, setExpYear] = useState('');
   
   const [loading, setLoading] = useState(false);
 
@@ -42,8 +45,8 @@ export default function CheckoutScreen({ navigation }: Props) {
   };
 
   const handlePayment = async () => {
-    if (!cardNumber || !cvc || !expMonth || !expYear) {
-      Alert.alert('Error', 'Please fill all card details');
+    if (!cardNumber || !cvc || !expMonth || !expYear || !fullName || !email) {
+      Alert.alert('Incompleto', 'Por favor completa todos los datos para continuar');
       return;
     }
 
@@ -65,10 +68,10 @@ export default function CheckoutScreen({ navigation }: Props) {
 
       const cardToken = wompiRes.data.data.id;
 
-      // 2. Send to Backend
+      // 2. Send to Backend using dynamic product ID and price
       const backendRes = await axios.post('http://localhost:3000/payments', {
-        productId: 'e2b6911c-772b-4171-8bc4-7eb38b971a81',
-        amount: 150000,
+        productId: product.id,
+        amount: Number(product.price),
         customerEmail: email,
         installments: 1,
         creditCardToken: cardToken,
@@ -115,16 +118,17 @@ export default function CheckoutScreen({ navigation }: Props) {
         <Text style={styles.header}>Checkout</Text>
         
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Personal Data</Text>
-          <TextInput style={styles.input} placeholder="Full Name" value={fullName} onChangeText={setFullName} />
-          <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" value={email} onChangeText={setEmail} />
-          <TextInput style={styles.input} placeholder="Phone Number" keyboardType="phone-pad" value={phone} onChangeText={setPhone} />
+          <Text style={styles.sectionTitle}>Total a Pagar: ${Number(product.price).toLocaleString('es-CO')}</Text>
+          <Text style={styles.sectionTitle}>Datos Personales</Text>
+          <TextInput style={styles.input} placeholder="Nombre Completo" value={fullName} onChangeText={setFullName} />
+          <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail} />
+          <TextInput style={styles.input} placeholder="Teléfono" keyboardType="phone-pad" value={phone} onChangeText={setPhone} />
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Billing Data</Text>
-          <TextInput style={styles.input} placeholder="ID Type (CC, CE, NIT)" value={legalIdType} onChangeText={setLegalIdType} />
-          <TextInput style={styles.input} placeholder="ID Number" keyboardType="numeric" value={legalId} onChangeText={setLegalId} />
+          <Text style={styles.sectionTitle}>Datos de Facturación</Text>
+          <TextInput style={styles.input} placeholder="Tipo (CC, CE, NIT)" autoCapitalize="characters" value={legalIdType} onChangeText={setLegalIdType} />
+          <TextInput style={styles.input} placeholder="Número de Documento" keyboardType="numeric" value={legalId} onChangeText={setLegalId} />
         </View>
 
         <TouchableOpacity style={styles.payButton} onPress={() => setShowModal(true)}>
@@ -136,7 +140,7 @@ export default function CheckoutScreen({ navigation }: Props) {
       <Modal visible={showModal} transparent={true} animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Credit Card Info</Text>
+            <Text style={styles.modalTitle}>Información de la Tarjeta</Text>
             
             <View style={styles.cardTypeContainer}>
               <Text style={styles.cardTypeText}>
@@ -144,7 +148,7 @@ export default function CheckoutScreen({ navigation }: Props) {
               </Text>
             </View>
 
-            <TextInput style={styles.input} placeholder="Card Number" keyboardType="numeric" maxLength={16} value={cardNumber} onChangeText={setCardNumber} />
+            <TextInput style={styles.input} placeholder="Número de Tarjeta" keyboardType="numeric" maxLength={16} value={cardNumber} onChangeText={setCardNumber} />
             <View style={styles.row}>
               <TextInput style={[styles.input, styles.half]} placeholder="MM" keyboardType="numeric" maxLength={2} value={expMonth} onChangeText={setExpMonth} />
               <TextInput style={[styles.input, styles.half]} placeholder="YY" keyboardType="numeric" maxLength={2} value={expYear} onChangeText={setExpYear} />
@@ -156,10 +160,10 @@ export default function CheckoutScreen({ navigation }: Props) {
             ) : (
               <View style={styles.modalActions}>
                 <TouchableOpacity style={styles.cancelButton} onPress={() => setShowModal(false)}>
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                  <Text style={styles.cancelButtonText}>Cancelar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.confirmButton} onPress={handlePayment}>
-                  <Text style={styles.confirmButtonText}>Confirm Payment</Text>
+                  <Text style={styles.confirmButtonText}>Confirmar Pago</Text>
                 </TouchableOpacity>
               </View>
             )}

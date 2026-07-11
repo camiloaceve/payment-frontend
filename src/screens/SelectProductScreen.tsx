@@ -1,37 +1,34 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'SelectProduct'>;
+  route: RouteProp<RootStackParamList, 'SelectProduct'>;
 };
 
-// Same mock product for now
-const product = {
-  id: 'e2b6911c-772b-4171-8bc4-7eb38b971a81',
-  name: 'Auriculares Inalámbricos Premium',
-  price: 150000,
-  image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop',
-  description: 'Experimenta el sonido de alta fidelidad con cancelación de ruido activa, 30 horas de batería y un diseño ergonómico que te hará olvidar que los llevas puestos.'
-};
+export default function SelectProductScreen({ navigation, route }: Props) {
+  const { product } = route.params;
+  const imageUrl = product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000&auto=format&fit=crop';
 
-export default function SelectProductScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Image source={{ uri: product.image }} style={styles.image} />
+        <Image source={{ uri: imageUrl }} style={styles.image} />
         <View style={styles.content}>
           <Text style={styles.title}>{product.name}</Text>
           <Text style={styles.price}>${product.price.toLocaleString('es-CO')}</Text>
           <Text style={styles.description}>{product.description}</Text>
+          <Text style={styles.stockText}>Disponibles: {product.stock}</Text>
         </View>
       </ScrollView>
 
       <View style={styles.footer}>
         <TouchableOpacity 
           style={styles.button}
-          onPress={() => navigation.navigate('Checkout')}
+          onPress={() => navigation.navigate('Checkout', { product })}
         >
           <Text style={styles.buttonText}>Continuar al Checkout</Text>
         </TouchableOpacity>
@@ -46,8 +43,9 @@ const styles = StyleSheet.create({
   image: { width: '100%', height: 350, resizeMode: 'cover' },
   content: { padding: 24 },
   title: { fontSize: 26, fontWeight: 'bold', color: '#0F172A', marginBottom: 12 },
-  price: { fontSize: 28, fontWeight: '800', color: '#0284C7', marginBottom: 20 },
-  description: { fontSize: 16, color: '#64748B', lineHeight: 24 },
+  price: { fontSize: 28, fontWeight: '800', color: '#0284C7', marginBottom: 12 },
+  description: { fontSize: 16, color: '#64748B', lineHeight: 24, marginBottom: 12 },
+  stockText: { fontSize: 14, color: '#10B981', fontWeight: 'bold' },
   footer: {
     position: 'absolute',
     bottom: 0,

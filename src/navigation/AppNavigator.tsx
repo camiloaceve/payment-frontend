@@ -11,8 +11,8 @@ import PaymentStatusScreen from '../screens/PaymentStatusScreen';
 export type RootStackParamList = {
   Splash: undefined;
   Home: undefined;
-  SelectProduct: undefined;
-  Checkout: undefined;
+  SelectProduct: { product: any };
+  Checkout: { product: any };
   PaymentStatus: { success: boolean; transactionId?: string; error?: string };
 };
 
