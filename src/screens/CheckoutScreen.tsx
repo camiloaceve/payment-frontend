@@ -96,16 +96,16 @@ export default function CheckoutScreen({ navigation, route }: Props) {
           transactionId: result.transaction.id 
         });
       } else {
-        throw new Error(result.error || 'Transaction Failed');
+        throw new Error(result.error || 'Transacción Fallida');
       }
 
     } catch (error: any) {
       console.log('Payment Error:', error.response?.data || error.message);
-      Alert.alert('Payment Failed', error.response?.data?.message || 'Hubo un error procesando el pago. Intenta de nuevo.');
+      Alert.alert('Pago Fallido', error.response?.data?.message || 'Hubo un error procesando el pago. Intenta de nuevo.');
       setShowModal(false);
       navigation.navigate('PaymentStatus', { 
         success: false, 
-        error: error.response?.data?.message || 'Transaction Declined'
+        error: error.response?.data?.message || 'Transacción Rechazada'
       });
     } finally {
       setLoading(false);
@@ -115,7 +115,7 @@ export default function CheckoutScreen({ navigation, route }: Props) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.header}>Checkout</Text>
+        <Text style={styles.header}>Caja / Pago</Text>
         
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Total a Pagar: ${Number(product.price).toLocaleString('es-CO')}</Text>
@@ -132,7 +132,7 @@ export default function CheckoutScreen({ navigation, route }: Props) {
         </View>
 
         <TouchableOpacity style={styles.payButton} onPress={() => setShowModal(true)}>
-          <Text style={styles.payButtonText}>Pay with credit card</Text>
+          <Text style={styles.payButtonText}>Pagar con tarjeta de crédito</Text>
         </TouchableOpacity>
       </ScrollView>
 

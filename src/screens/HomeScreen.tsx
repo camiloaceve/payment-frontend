@@ -76,7 +76,7 @@ export default function HomeScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Our Products</Text>
+      <Text style={styles.header}>Nuestros Productos</Text>
       {loading ? (
         <ActivityIndicator size="large" color="#0284C7" style={{ marginTop: 50 }} />
       ) : (

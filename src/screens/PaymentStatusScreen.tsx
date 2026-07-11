@@ -23,23 +23,23 @@ export default function PaymentStatusScreen({ navigation, route }: Props) {
         <Text style={styles.icon}>{success ? '✅' : '❌'}</Text>
       </View>
       
-      <Text style={styles.title}>{success ? 'Payment Successful!' : 'Payment Failed'}</Text>
+      <Text style={styles.title}>{success ? '¡Pago Exitoso!' : 'Pago Fallido'}</Text>
       
       {success && transactionId ? (
         <Text style={styles.message}>
-          Your order has been processed. Transaction ID: {transactionId}
+          Tu orden ha sido procesada. ID de Transacción: {transactionId}
         </Text>
       ) : (
         <Text style={styles.message}>
-          {error || 'We could not process your payment at this time.'}
+          {error || 'No pudimos procesar tu pago en este momento.'}
         </Text>
       )}
 
       {success && transactionData && (
         <View style={styles.secureBox}>
-          <Text style={styles.secureTitle}>🔒 Securely Stored (Redux)</Text>
-          <Text style={styles.secureText}>Reference: {transactionData.reference}</Text>
-          <Text style={styles.secureText}>Status: {transactionData.status}</Text>
+          <Text style={styles.secureTitle}>🔒 Guardado Seguro (Redux)</Text>
+          <Text style={styles.secureText}>Referencia: {transactionData.reference}</Text>
+          <Text style={styles.secureText}>Estado: {transactionData.status}</Text>
         </View>
       )}
 
@@ -47,7 +47,7 @@ export default function PaymentStatusScreen({ navigation, route }: Props) {
         style={styles.button}
         onPress={() => navigation.popToTop()} // Go back to Home
       >
-        <Text style={styles.buttonText}>Back to Home</Text>
+        <Text style={styles.buttonText}>Volver al Inicio</Text>
       </TouchableOpacity>
     </View>
   );

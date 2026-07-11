@@ -27,8 +27,8 @@ export default function SplashScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim, alignItems: 'center' }}>
-        <Text style={styles.title}>TECH STORE</Text>
-        <Text style={styles.subtitle}>Wompi Integration Test</Text>
+        <Text style={styles.title}>TIENDA TECH</Text>
+        <Text style={styles.subtitle}>Prueba de Integración Wompi</Text>
       </Animated.View>
     </View>
   );
