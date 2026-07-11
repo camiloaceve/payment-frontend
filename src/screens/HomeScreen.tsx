@@ -76,15 +76,20 @@ export default function HomeScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Nuestros Productos</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Nuestros Productos</Text>
+        <Text style={styles.headerSub}>Descubre tecnología de élite</Text>
+      </View>
+
       {loading ? (
-        <ActivityIndicator size="large" color="#0284C7" style={{ marginTop: 50 }} />
+        <ActivityIndicator size="large" color="#38BDF8" style={{ marginTop: 50 }} />
       ) : (
         <FlatList
           data={products}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
           contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </View>
@@ -92,26 +97,30 @@ export default function HomeScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC', paddingTop: 60 },
-  header: { fontSize: 28, fontWeight: '800', color: '#0F172A', paddingHorizontal: 20, marginBottom: 20 },
-  list: { paddingHorizontal: 20 },
+  container: { flex: 1, backgroundColor: '#0F172A', paddingTop: 60 },
+  headerContainer: { marginBottom: 24, paddingHorizontal: 20 },
+  header: { fontSize: 34, fontWeight: '900', color: '#F8FAFC', letterSpacing: 1 },
+  headerSub: { fontSize: 16, color: '#94A3B8', marginTop: 6, fontWeight: '500' },
+  list: { paddingHorizontal: 20, paddingBottom: 40 },
   card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: '#1E293B',
+    borderRadius: 24,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
-    marginBottom: 20,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 10,
+    marginBottom: 28,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
   },
-  cardDisabled: { opacity: 0.6 },
-  image: { width: '100%', height: 250, resizeMode: 'cover' },
+  cardDisabled: { opacity: 0.5 },
+  image: { width: '100%', height: 260, resizeMode: 'cover' },
   imageDisabled: { tintColor: 'gray' },
-  cardInfo: { padding: 20 },
-  productName: { fontSize: 18, fontWeight: '600', color: '#1E293B', marginBottom: 8 },
-  productPrice: { fontSize: 22, fontWeight: 'bold', color: '#0284C7', marginBottom: 4 },
-  stockText: { fontSize: 14, color: '#10B981', fontWeight: '600' },
+  cardInfo: { padding: 24 },
+  productName: { fontSize: 20, fontWeight: '800', color: '#F8FAFC', marginBottom: 8, letterSpacing: 0.5 },
+  productPrice: { fontSize: 24, fontWeight: '900', color: '#38BDF8', marginBottom: 8 },
+  stockText: { fontSize: 13, color: '#10B981', fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 },
   outOfStockText: { color: '#EF4444' }
 });
