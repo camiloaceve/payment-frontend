@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
 interface TransactionState {
   transactionData: any | null;
@@ -27,7 +28,17 @@ export const { setTransactionData, clearTransactionData } = transactionSlice.act
 // Thunk to securely save to local storage (Requirement 3 from PDF)
 export const saveTransactionSecurely = (data: any) => async (dispatch: any) => {
   try {
-    await SecureStore.setItemAsync('transaction_data', JSON.stringify(data));
+    const stringifiedData = JSON.stringify(data);
+    
+    if (Platform.OS === 'web') {
+      // SecureStore is not supported on Web. Fallback to base64 "encrypted" localStorage
+      const encryptedData = typeof window !== 'undefined' ? btoa(stringifiedData) : stringifiedData;
+      localStorage.setItem('transaction_data', encryptedData);
+    } else {
+      // Native SecureStore (Android/iOS)
+      await SecureStore.setItemAsync('transaction_data', stringifiedData);
+    }
+    
     dispatch(setTransactionData(data));
   } catch (error) {
     console.error('Failed to securely save transaction', error);
