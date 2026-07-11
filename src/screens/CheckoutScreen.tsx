@@ -73,6 +73,7 @@ export default function CheckoutScreen({ navigation, route }: Props) {
       // 2. Send to Backend using dynamic product ID, quantity and total amount
       const backendRes = await axios.post('http://localhost:3000/payments', {
         productId: product.id,
+        quantity: quantity,
         amount: totalAmount,
         customerEmail: email,
         installments: 1,
